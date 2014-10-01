@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		844DC8B019DB6D6300C6DAC1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844DC8AF19DB6D6300C6DAC1 /* main.cpp */; };
 		844DC8B219DB6D6300C6DAC1 /* ESN.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 844DC8B119DB6D6300C6DAC1 /* ESN.1 */; };
+		844DC8BA19DB6DEB00C6DAC1 /* NARMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844DC8B819DB6DEB00C6DAC1 /* NARMA.cpp */; };
+		844DC8BD19DB77CA00C6DAC1 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844DC8BB19DB77CA00C6DAC1 /* Input.cpp */; };
+		844DC8C119DB7FA400C6DAC1 /* ESN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844DC8BF19DB7FA400C6DAC1 /* ESN.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +31,14 @@
 		844DC8AC19DB6D6300C6DAC1 /* ESN */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ESN; sourceTree = BUILT_PRODUCTS_DIR; };
 		844DC8AF19DB6D6300C6DAC1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		844DC8B119DB6D6300C6DAC1 /* ESN.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = ESN.1; sourceTree = "<group>"; };
+		844DC8B819DB6DEB00C6DAC1 /* NARMA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NARMA.cpp; sourceTree = "<group>"; };
+		844DC8B919DB6DEB00C6DAC1 /* NARMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NARMA.h; sourceTree = "<group>"; };
+		844DC8BB19DB77CA00C6DAC1 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
+		844DC8BC19DB77CA00C6DAC1 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
+		844DC8BE19DB783100C6DAC1 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
+		844DC8BF19DB7FA400C6DAC1 /* ESN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ESN.cpp; sourceTree = "<group>"; };
+		844DC8C019DB7FA400C6DAC1 /* ESN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESN.h; sourceTree = "<group>"; };
+		844DC8C219DC04D500C6DAC1 /* Methods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Methods.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +72,14 @@
 			isa = PBXGroup;
 			children = (
 				844DC8AF19DB6D6300C6DAC1 /* main.cpp */,
+				844DC8BF19DB7FA400C6DAC1 /* ESN.cpp */,
+				844DC8C219DC04D500C6DAC1 /* Methods.h */,
+				844DC8C019DB7FA400C6DAC1 /* ESN.h */,
+				844DC8BB19DB77CA00C6DAC1 /* Input.cpp */,
+				844DC8BC19DB77CA00C6DAC1 /* Input.h */,
+				844DC8BE19DB783100C6DAC1 /* Attributes.h */,
+				844DC8B819DB6DEB00C6DAC1 /* NARMA.cpp */,
+				844DC8B919DB6DEB00C6DAC1 /* NARMA.h */,
 				844DC8B119DB6D6300C6DAC1 /* ESN.1 */,
 			);
 			path = ESN;
@@ -117,7 +136,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				844DC8BD19DB77CA00C6DAC1 /* Input.cpp in Sources */,
 				844DC8B019DB6D6300C6DAC1 /* main.cpp in Sources */,
+				844DC8C119DB7FA400C6DAC1 /* ESN.cpp in Sources */,
+				844DC8BA19DB6DEB00C6DAC1 /* NARMA.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +219,16 @@
 		844DC8B619DB6D6400C6DAC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include/eigen3,
+					/opt/local/include/,
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					Accelerate,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -204,6 +236,16 @@
 		844DC8B719DB6D6400C6DAC1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include/eigen3,
+					/opt/local/include/,
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					Accelerate,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -227,6 +269,7 @@
 				844DC8B719DB6D6400C6DAC1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -57,6 +57,12 @@
             ReferencedContainer = "container:ESN.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--config_file /Users/admin/Documents/Software/Projects/ESN/ESN/config.txt"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

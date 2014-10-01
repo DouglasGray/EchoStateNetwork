@@ -1,0 +1,10 @@
+input_units		2
+output_units		1
+internal_units		100
+spectral_radius		0.5
+input_scaling		1.0
+teacher_scaling		1.0
+teacher_shift		0.0
+feedback_scaling	0.0
+leaking_rate		0.3
+regularisation		0.0
