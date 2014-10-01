@@ -37,7 +37,10 @@ ESN::ESN(Attributes &atts)
     density = (atts.density == -1) ? std::min(10.0 / ninternal, 1.0) : atts.density;
     noise = atts.noise;
     radius = atts.radius;
+    
     is_trained = false;
+    is_predictive = false;
+    is_generative = false;
     
     // Set scaling matrices
     iscale = atts.input_scaling * Matrixd::Ones(ninput, 1);
@@ -165,7 +168,7 @@ void ESN::init_matrices()
             std::cout << "Failed to converge. Reinitialising..." << std::endl;
             
             // Increment the density by 0.05. At some point the eigenvalues will converge
-            density = std::min(1.0 , density + 0.05);
+            // density = std::min(1.0 , density + 0.05);
         }
     }
     
@@ -239,29 +242,51 @@ void ESN::test(Matrixd &inputs, Matrixd &outputs, int washout)
     }
 }
 
+// Collect the various states for training and testing.
+// This function may be used in three different ways:
+// 1. If both inputs and targets are specified, then this is a predictive task
+// 2. If inputs are empty but targets are specified, then this is a generative task
+// 3. If targets are empty but not the inputs, then the network is testing
 Matrixd ESN::compute_state_matrix(Matrixd &inputs, Matrixd &targets, int washout)
 {
+    int ndata = (int)inputs.cols();
+    int ntarg = (int)targets.cols();
     bool teacher_forcing;
+    int collect_ix = 0;
     
-    if(inputs.cols() != targets.cols() && targets.cols() > 0)
+    if (ndata > 0 && ntarg > 0)
     {
-        std::cout << "ESN::compute_state_matrix: Input and target matrices must be the same size for training." << std::endl;
-        exit(EXIT_FAILURE);
-    }
-    // Otherwise if no targets provided then the network is in testing phase
-    else if (targets.cols() == 0)
-        teacher_forcing = false;
-    // Otherwise assume training
-    else if (inputs.cols() == targets.cols())
+        // Predictive task
+        if (ndata != ntarg)
+        {
+            std::cout << "ESN::compute_state_matrix: Input and target matrices must be the same size for training." << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        is_predictive = true;
         teacher_forcing = true;
+    }
+    else if (ndata == 0)
+    {
+        // Generative task
+        if (ninput != 0)
+        {
+            std::cout << "ESN::compute_state_matrix: Generative tasks must have zero input units." << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        is_generative = true;
+        teacher_forcing = true;
+        ndata = ntarg;
+    }
+    else if (ntarg == 0)
+    {
+        // Testing
+        teacher_forcing = false;
+    }
     else
     {
-        std::cout << "ESN::compute_state_matrix: Things happen." << std::endl;
+        std::cout << "ESN::compute_state_matrix: HOW1" << std::endl;
         exit(EXIT_FAILURE);
     }
-    
-    int ndata = (int)inputs.cols();
-    int collect_ix = 0;
     
     Matrixd X = Matrixd::Zero(ninput + ninternal, ndata - washout);
     Matrixd total_state = Matrixd::Zero(ninput + noutput + ninternal, 1);
@@ -272,13 +297,28 @@ Matrixd ESN::compute_state_matrix(Matrixd &inputs, Matrixd &targets, int washout
     
     for (int i = 0; i < ndata; i++)
     {
-        // Apply input shift and scaling
-        in = iscale.cwiseProduct(inputs.col(i)) + ishift;
+        if (teacher_forcing)
+        {
+            // Only the training for a predictive task requires input
+            if (is_predictive)
+                in = iscale.cwiseProduct(inputs.col(i)) + ishift;
+        }
+        else
+        {
+            // When testing, use an input for prediction.
+            // Otherwise set the internal state accordingly for the generative task
+            if (is_predictive)
+                in = iscale.cwiseProduct(inputs.col(i)) + ishift;
+            if (i == 0 && is_generative)
+                total_state = x_init;
+        }
         
         total_state.middleRows(ninternal, ninput) = in;
+        //std::cout << total_state << std::endl;
         
         // Compute the reservoir activations
         compute_internal_state(total_state, internal);
+        //std::cout << internal << std::endl;
         
         // If training then apply teacher shift and scaling.
         // Otherwise generate output
@@ -291,6 +331,7 @@ Matrixd ESN::compute_state_matrix(Matrixd &inputs, Matrixd &targets, int washout
             out = W_out * tmp;
             outf(out);
         }
+        //std::cout << out << std::endl;
         
         // Update total state
         total_state << internal,
@@ -308,6 +349,11 @@ Matrixd ESN::compute_state_matrix(Matrixd &inputs, Matrixd &targets, int washout
             collect_ix++;
         }
     }
+    
+    // Save the last state of the reservoir (used for generative tasks)
+    if (teacher_forcing)
+        x_init = total_state;
+    
     return X;
 }
 
@@ -358,14 +404,26 @@ void ESN::error_check(Matrixd &state)
         }
 }
 
-double ESN::mse(Matrixd &Y_gen, Matrixd &targets, int washout)
+double ESN::nrmse(Matrixd &Y_gen, Matrixd &targets, int washout)
 {
     double mse;
+    double y_min = std::numeric_limits<double>::infinity();
+    double y_max = (-1) * std::numeric_limits<double>::infinity();
+    double val;
     int ndata = (int)Y_gen.cols();
     
     Matrixd Y_targ = targets.rightCols(targets.cols() - washout);
     
     assert(Y_targ.cols() == Y_gen.cols());
+    
+    // Find the max and min for the NRMSE
+    for (int i = 0; i < ndata; i++)
+        for (int j = 0; j < noutput; j++)
+        {
+            val = Y_targ(j, i);
+            y_min = (val < y_min) ? val : y_min;
+            y_max = (val > y_max) ? val : y_max;
+        }
     
     // Find the difference
     Matrixd diff = Y_gen - Y_targ;
@@ -373,11 +431,11 @@ double ESN::mse(Matrixd &Y_gen, Matrixd &targets, int washout)
     // Square it
     diff = diff.cwiseProduct(diff);
     
-    // Sum columnwise and then over the final vector
-    mse = (diff.colwise().sum()).sum();
-    
     // Take average
-    mse /= ndata * noutput;
+    mse = (diff.colwise().sum()).sum() / (ndata * noutput);
+    
+    // Take square root and normalise
+    mse = std::pow(mse, 0.5) / (y_max - y_min);
     
     return mse;
 }

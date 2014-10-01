@@ -29,8 +29,8 @@ public:
     // Test the network
     void test(Matrixd &input, Matrixd &generated, int washout);
     
-    // Calculate the mean square error between two matrices
-    double mse(Matrixd &generated, Matrixd &targets, int washout);
+    // Calculate the normalised root mean square error between two matrices
+    double nrmse(Matrixd &generated, Matrixd &targets, int washout);
     
 private:
     /*-- Parameters --*/
@@ -45,6 +45,11 @@ private:
     double noise;
     double radius;
     bool is_trained;
+    bool is_predictive;
+    bool is_generative;
+    
+    // Store most recent reservoir stat
+    Matrixd x_init;
     
     // Scaling matrices
     Matrixd iscale;

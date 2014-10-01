@@ -12,6 +12,7 @@
 		844DC8BA19DB6DEB00C6DAC1 /* NARMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844DC8B819DB6DEB00C6DAC1 /* NARMA.cpp */; };
 		844DC8BD19DB77CA00C6DAC1 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844DC8BB19DB77CA00C6DAC1 /* Input.cpp */; };
 		844DC8C119DB7FA400C6DAC1 /* ESN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 844DC8BF19DB7FA400C6DAC1 /* ESN.cpp */; };
+		84F04AEE19DC6D400038B6F3 /* MackeyGlass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84F04AEC19DC6D400038B6F3 /* MackeyGlass.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,6 +40,8 @@
 		844DC8BF19DB7FA400C6DAC1 /* ESN.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ESN.cpp; sourceTree = "<group>"; };
 		844DC8C019DB7FA400C6DAC1 /* ESN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESN.h; sourceTree = "<group>"; };
 		844DC8C219DC04D500C6DAC1 /* Methods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Methods.h; sourceTree = "<group>"; };
+		84F04AEC19DC6D400038B6F3 /* MackeyGlass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MackeyGlass.cpp; sourceTree = "<group>"; };
+		84F04AED19DC6D400038B6F3 /* MackeyGlass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MackeyGlass.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +76,8 @@
 			children = (
 				844DC8AF19DB6D6300C6DAC1 /* main.cpp */,
 				844DC8BF19DB7FA400C6DAC1 /* ESN.cpp */,
+				84F04AEC19DC6D400038B6F3 /* MackeyGlass.cpp */,
+				84F04AED19DC6D400038B6F3 /* MackeyGlass.h */,
 				844DC8C219DC04D500C6DAC1 /* Methods.h */,
 				844DC8C019DB7FA400C6DAC1 /* ESN.h */,
 				844DC8BB19DB77CA00C6DAC1 /* Input.cpp */,
@@ -140,6 +145,7 @@
 				844DC8B019DB6D6300C6DAC1 /* main.cpp in Sources */,
 				844DC8C119DB7FA400C6DAC1 /* ESN.cpp in Sources */,
 				844DC8BA19DB6DEB00C6DAC1 /* NARMA.cpp in Sources */,
+				84F04AEE19DC6D400038B6F3 /* MackeyGlass.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

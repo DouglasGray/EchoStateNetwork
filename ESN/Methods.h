@@ -92,7 +92,7 @@ public:
         
         W_out = p_vec * cov_mat.inverse();
         
-        //std::cout << W_out << std::endl;
+        std::cout << W_out << std::endl;
     }
     
     // Pseudo-Inverse
